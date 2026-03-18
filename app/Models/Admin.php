@@ -2,4 +2,7 @@
 
 namespace App\Models;
 
-class Admin extends User {}
+class Admin extends User
+{
+    protected $fillable = ['user_id'];
+}

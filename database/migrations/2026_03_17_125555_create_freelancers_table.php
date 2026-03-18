@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('user_type', ['client', 'freelancer', 'admin']);
+        Schema::create('freelancers', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignId('user_id')->constrained('users');
+            $table->json('skills');
+            $table->boolean('is_available')->default(true);
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('user_type');
-        });
+        Schema::dropIfExists('freelancers');
     }
 };
