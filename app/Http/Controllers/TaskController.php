@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -11,7 +13,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $tasks = Task::all();
+
+        return response()->json(['status' => 'success', 'tasks' => $tasks]);
     }
 
     /**
@@ -19,7 +23,19 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'budget' => 'required|numeric',
+            'technologies' => 'required|array',
+            'type' => 'required|string',
+            // 'status' => 'required|in:pending,accepted,completed',
+        ]);
+        $validated['created_by'] = Auth::user()->id;
+
+        $task = Task::create($validated);
+
+        return response()->json(['status' => 'success', 'message' => 'task was created successfully', 'task' => $task], 201);
     }
 
     /**
