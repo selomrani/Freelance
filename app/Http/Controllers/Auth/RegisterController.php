@@ -21,6 +21,9 @@ class RegisterController extends Controller
             'company' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
             'user_type' => ['required', 'in:client,freelancer'],
+            'skills' => ['required_if:user_type,freelancer', 'array'],
+            'portfolio' => ['string'],
+            'is_available' => ['boolean'],
         ]);
 
         $user = User::create([
@@ -40,8 +43,9 @@ class RegisterController extends Controller
         } elseif ($user->user_type == 'freelancer') {
             Freelancer::create([
                 'user_id' => $user->id,
-                'company' => $validated['company'],
-                'description' => $validated['description'],
+                'skills' => $validated['skills'],
+                'portfolio' => $validated['portfolio'],
+                'is_available' => $validated['is_available'],
             ]);
         }
 
@@ -50,7 +54,7 @@ class RegisterController extends Controller
         return response()->json([
             'status' => 'success',
             'token' => $token,
-            'user' => $user->load($user->user_type == 'client' ? 'client' : 'freelancer'),
+            'user' => $user,
         ]);
     }
 }

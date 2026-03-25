@@ -50,13 +50,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function freelacers()
+    public function freelacer()
     {
-        return $this->hasMany(Freelancer::class);
+        return $this->hasOne(Freelancer::class);
     }
 
-    public function clients()
+    public function client()
     {
-        return $this->hasMany(Client::class);
+        return $this->hasOne(Client::class);
     }
 }
