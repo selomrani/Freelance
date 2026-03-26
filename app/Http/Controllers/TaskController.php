@@ -46,10 +46,12 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        // Since we're using Route Model Binding, $task is already fetched
+        $task->load('offers');
+
         return response()->json([
             'status' => 'success',
             'task' => $task,
+            // 'offers' => $offers,
         ]);
     }
 

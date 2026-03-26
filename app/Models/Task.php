@@ -31,4 +31,9 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'user_id');
     }
+
+    public function offers()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }
