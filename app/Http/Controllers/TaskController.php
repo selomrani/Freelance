@@ -41,24 +41,47 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Task $task)
     {
-        //
+        // Since we're using Route Model Binding, $task is already fetched
+        return response()->json([
+            'status' => 'success',
+            'task' => $task,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Task $task)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string',
+            'budget' => 'sometimes|required|numeric',
+            'technologies' => 'sometimes|required|array',
+            'type' => 'sometimes|required|string',
+            'status' => 'sometimes|required|in:pending,accepted,completed',
+        ]);
+        $task->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Task updated successfully',
+            'task' => $task,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Task $task)
     {
-        //
+        $task->delete();
+
+        return response()->json(['status' => 'sucess', 'message' => 'Task was deleted successfuly']);
     }
 }

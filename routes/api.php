@@ -16,6 +16,8 @@ Route::post('/login', LoginController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', LogoutController::class);
     Route::post('/tasks', [TaskController::class, 'store']);
+    Route::delete('tasks/{task}/delete', [TaskController::class, 'destroy']);
+    Route::put('/tasks/{task}/update', [TaskController::class, 'update']);
 });
 
 Route::get('/tasks', [TaskController::class, 'index']);
