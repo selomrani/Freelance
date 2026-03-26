@@ -20,7 +20,7 @@ class SubmissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Task $task)
+    public function offer(Request $request, Task $task)
     {
         $validated = $request->validate(['message' => 'required|string',
             'offered_price' => 'required|numeric']);
@@ -53,5 +53,26 @@ class SubmissionController extends Controller
     public function destroy(Submission $submission)
     {
         //
+    }
+
+    public function accept(Task $task, Submission $submission)
+    {
+        $alreadyAccepted = $task->offers()->where('status', 'accepted')->exists();
+
+        if ($alreadyAccepted) {
+            return response()->json([
+                'message' => 'The client already accepted another submission/offer',
+            ], 422);
+        }
+        $submission->status = 'accepted';
+        $submission->save();
+        $task->freelancer_id = $submission->offered_by;
+        $task->save();
+
+        return response()->json([
+            'message' => 'Offer accepted successfully',
+            'accepted_offer' => $submission,
+            'offered_by' => $submission->offered_by(),
+        ]);
     }
 }

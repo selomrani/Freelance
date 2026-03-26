@@ -20,6 +20,7 @@ class Task extends Model
         'technologies',
         'type',
         'status',
+        'freelancer_id',
     ];
 
     protected $casts = [

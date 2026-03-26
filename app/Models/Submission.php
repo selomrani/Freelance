@@ -12,4 +12,9 @@ class Submission extends Model
     {
         return $this->belongsTo(Task::class, 'task_id');
     }
+
+    public function offered_by()
+    {
+        return $this->belongsTo(User::class, 'offered_by');
+    }
 }
